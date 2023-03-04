@@ -44,8 +44,8 @@ export class UserRepository {
                     this.on("company.id", "mbc.company_id");
                 });
 
-            if (search.uuid) {
-                query.where("user.id", search.uuid);
+            if (search.id) {
+                query.where("user.id", search.id);
             }
 
             if (search.email) {
@@ -242,8 +242,8 @@ export class UserRepository {
                 this.onNull("mc.deleted_at");
             });
 
-            if (search.uuid) {
-                query.where("user.id", search.uuid);
+            if (search.id) {
+                query.where("user.id", search.id);
             }
 
             if (search.email) {

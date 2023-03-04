@@ -6,7 +6,6 @@ export class AuthRepository {
         try {
             const select = [
                 "user.id",
-                "user.uuid",
                 "user.email",
                 "user.password",
                 "user.role",

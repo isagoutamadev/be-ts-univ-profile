@@ -83,9 +83,9 @@ export class UserController implements Controller {
     ): Promise<Response | void> => {
         try {
             const { auth } = res.app.locals;
-            const { uuid } = req.params;
+            const { id } = req.params;
 
-            const result = await this.service.find({uuid}, auth);
+            const result = await this.service.find({id}, auth);
             
             return response.global<User>(res, {
                 code: ResponseCode.OK,

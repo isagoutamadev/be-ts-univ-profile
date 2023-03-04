@@ -1,6 +1,5 @@
 export interface User {
-    id?: number,
-    uuid?: number,
+    id?: string,
     email?: string,
     username?: string,
     password?: string,
@@ -8,7 +7,7 @@ export interface User {
 }
 
 export interface SearchUser {
-    uuid?: string,
+    id?: string,
     email?: string,
     username?: string,
     name?: string,

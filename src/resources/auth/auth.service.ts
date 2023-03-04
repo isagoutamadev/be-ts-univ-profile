@@ -23,7 +23,7 @@ export class AuthService {
             delete data.password;
 
             return {
-                token: AuthHelper.jwtEncode({uuid: data.uuid}),
+                token: AuthHelper.jwtEncode({id: data.id}),
                 user: data
             }  
 
