@@ -83,9 +83,9 @@ export class UserController implements Controller {
     ): Promise<Response | void> => {
         try {
             const { auth } = res.app.locals;
-            const { id } = req.params;
+            const { uuid } = req.params;
 
-            const result = await this.service.find({id}, auth);
+            const result = await this.service.find({uuid}, auth);
             
             return response.global<User>(res, {
                 code: ResponseCode.OK,
@@ -104,14 +104,10 @@ export class UserController implements Controller {
         try {
             const { auth } = res.app.locals;
 
-            const {user, employee} = req.body;
+            const {user} = req.body;
             const result = await this.service.create({
                 ...user,
                 created_by: auth.id,
-            }, 
-            {
-                ...employee,
-                created_by: auth.id
             });
             
             return response.created<User>(result, res);
@@ -127,16 +123,12 @@ export class UserController implements Controller {
     ): Promise<Response | void> => {
         try {
             const { auth } = res.app.locals;
-            const { id } = req.params;
+            const { uuid } = req.params;
             const {user, employee} = req.body;
             const result = await this.service.update({
                 ...user,
-                id: id,
+                uuid: uuid,
                 updated_by: auth.id,
-            }, 
-            {
-                ...employee,
-                updated_by: auth.id
             });
             
             return response.ok<User>(result, res);

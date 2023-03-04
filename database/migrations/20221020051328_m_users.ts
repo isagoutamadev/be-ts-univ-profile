@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string("email").unique().notNullable();
         table.string("username").unique().notNullable();
         table.string("password").notNullable();
+        table.enu("role", ["admin", "student"]);
         table.uuid("created_by").nullable();
         table.uuid("updated_by").nullable();
         table.timestamps();

@@ -8,7 +8,7 @@ import { validate, ReqType } from '@/middlewares/validate.middleware';
 import { authMiddleware } from '@/middlewares/auth.middleware';
 import { AuthService } from '@/resources/auth/auth.service';
 import HttpException from '@/utils/exceptions/http.exception';
-import { JWT } from '@/models/jwt.model';
+import { JWT } from '@/models/auth.model';
 
 // const service = new AuthService();
 
@@ -38,18 +38,6 @@ export class AuthController implements Controller {
             validate(LoginSchema, ReqType.BODY),
             this.login
         );
-        
-        this.router.post(
-            '/login/sso',
-            this.loginSso
-        );
-        
-        this.router.post(
-            'auth/fcm',
-            authMiddleware(),
-            validate(FcmSchema, ReqType.BODY),
-            this.updateFCM
-        );
     }
 
     private login = async (
@@ -59,36 +47,8 @@ export class AuthController implements Controller {
     ): Promise<Response | void> => {
         try {
             const { body } = req;
-            const user: User = {
-                ...body
-            };
 
-            const result = await this.service.login(user);
-
-            return response.global<JWT>(res, {
-                code: ResponseCode.OK,
-                result,
-            });
-        } catch (err: any) {
-            return next(new HttpException(err.message, err.statusCode));
-        }
-    }
-    
-    private loginSso = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<Response | void> => {
-        try {
-            const { token } = req.body;
-
-            const decodeBase64 = Buffer.from(token, 'base64').toString('utf-8');
-            const jsonParsed: User = JSON.parse(decodeBase64);
-
-            const result = await this.service.login({
-                email: jsonParsed.username,
-                password: jsonParsed.password,
-            });
+            const result = await this.service.login(body);
 
             return response.global<JWT>(res, {
                 code: ResponseCode.OK,
@@ -110,32 +70,6 @@ export class AuthController implements Controller {
             return response.global<User>(res, {
                 code: ResponseCode.OK,
                 result: auth,
-            });
-        } catch (err: any) {
-            return next(new HttpException(err.message, err.statusCode));
-        }
-    }
-    
-    private updateFCM = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-    ): Promise<Response | void> => {
-        try {
-            const { auth } = res.app.locals;
-            const { device_id, fcm_token } = req.body;
-            await this.service.updateById({
-                id: auth.id,
-                device_id: String(device_id),
-                fcm_token: String(fcm_token),
-            });
-
-            return response.global<User>(res, {
-                code: ResponseCode.OK,
-                result: {
-                    device_id,
-                    fcm_token
-                },
             });
         } catch (err: any) {
             return next(new HttpException(err.message, err.statusCode));

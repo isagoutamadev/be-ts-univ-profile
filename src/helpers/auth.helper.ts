@@ -1,17 +1,18 @@
 import * as crypto from "crypto";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 export default class AuthHelper {
-    static encrypt(text?: string): string {
-        const key = process.env.ENCRYPT_KEY || "";
-        const digest = 'hex';
+    static encrypt(text: string): string {
+        const saltRounds = Number(process.env.SALT_ROUNDS);
 
-        const textMD5 = crypto.createHash('md5').update(text || "").digest(digest);
-        const md5 = crypto.createHash('md5').update(key + textMD5 + key).digest(digest);
-        const sha1 = crypto.createHash('sha1').update(md5).digest(digest);
-        const sha256 = crypto.createHash('sha256').update(sha1).digest(digest);
+        const hash = bcrypt.hashSync(text, saltRounds);
 
-        return sha256;
+        return hash;
+    }
+
+    static compare(text: string, encrypted: string): boolean {
+        return bcrypt.compareSync(text, encrypted);
     }
 
     static jwtEncode(data: object): string {

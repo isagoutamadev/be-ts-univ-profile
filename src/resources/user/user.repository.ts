@@ -44,12 +44,8 @@ export class UserRepository {
                     this.on("company.id", "mbc.company_id");
                 });
 
-            if (search.id) {
-                query.where("user.id", search.id);
-            }
-
-            if (search.role_id) {
-                query.where("user.role_id", search.role_id);
+            if (search.uuid) {
+                query.where("user.id", search.uuid);
             }
 
             if (search.email) {
@@ -63,20 +59,9 @@ export class UserRepository {
             if (search.name) {
                 query.whereILike("employee.name", search.name);
             }
-
-            if (search.company_id) {
-                query.where("company.id", search.company_id);
-            }
             
-            if (search.branch_company_id) {
-                query.where("mbc.id", search.branch_company_id);
-            }
 
             query.whereNull("user.deleted_at");
-            query.whereNull("employee.deleted_at");
-            query.whereNull("role.deleted_at");
-            query.whereNull("mbc.deleted_at");
-            query.whereNull("company.deleted_at");
 
             const offset = limit * page - limit;
             const queryCount = knex().count('id as total').from(knex.raw(`(${query.toQuery()}) x`)).first();
@@ -257,12 +242,8 @@ export class UserRepository {
                 this.onNull("mc.deleted_at");
             });
 
-            if (search.id) {
-                query.where("user.id", search.id);
-            }
-
-            if (search.role_id) {
-                query.where("user.role_id", search.role_id);
+            if (search.uuid) {
+                query.where("user.id", search.uuid);
             }
 
             if (search.email) {
@@ -275,14 +256,6 @@ export class UserRepository {
             
             if (search.name) {
                 query.whereILike("employee.name", search.name);
-            }
-
-            if (search.company_id) {
-                query.where("company.id", search.company_id);
-            }
-            
-            if (search.branch_company_id) {
-                query.where("mbc.id", search.branch_company_id);
             }
 
             query.whereNull("user.deleted_at");

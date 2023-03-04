@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const LoginSchema = Joi.object({
-    email: Joi.string().min(3).required(), // actually email or username
+    username_or_email: Joi.string().min(3).required(), // actually email or username
     password: Joi.string().min(5).required()
 });
 
