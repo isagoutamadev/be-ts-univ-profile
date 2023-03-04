@@ -1,9 +1,8 @@
-# be_sipendi
+# Uni Profile
 
 ## Requirement
 - Install yarn
 - Install mariadb 10.6.8 or mysql
-- [Optional] if you not install mariadb or mysql you can use docker-compose yaml in this project
 
 ```bash
   cd docker-compose
