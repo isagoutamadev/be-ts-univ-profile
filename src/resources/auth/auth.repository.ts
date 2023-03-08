@@ -13,7 +13,8 @@ export class AuthRepository {
                 knex.raw(`JSON_OBJECT(
                     'id', student.id,
                     'name', student.name,
-                    'avatar', student.avatar
+                    'avatar', student.avatar,
+                    'avatar', student.graduated_at
                 ) as student`),
             ];
 
