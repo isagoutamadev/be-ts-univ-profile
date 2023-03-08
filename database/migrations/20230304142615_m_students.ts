@@ -11,8 +11,8 @@ export async function up(knex: Knex): Promise<void> {
             .onDelete("cascade");
         table.string("avatar").nullable();
         table.string("nim").unique().notNullable();
-        table.string("name").unique().notNullable();
-        table.string("bio").unique().notNullable();
+        table.string("name").notNullable();
+        table.string("bio").nullable();
         table.string("website_screenshot").nullable();
         table.string("website_url").nullable();
         table.date("registered_at").notNullable();

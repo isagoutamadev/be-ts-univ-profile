@@ -14,22 +14,22 @@ export function authMiddleware(isDontGetDetail?: boolean) {
             token = token.replace("Bearer ", "");
             const decoded = AuthHelper.jwtDecode(token);
 
-            if (isDontGetDetail) {
-                res.app.locals.auth = decoded;
+            // if (isDontGetDetail) {
+            //     res.app.locals.auth = decoded;
 
-                return next();
-            }
-            // @ts-ignore
-            const auth = await userRepository.findById(decoded.id);
+            //     return next();
+            // }
+            // // @ts-ignore
+            // const auth = await userRepository.findById(decoded.id);
 
-            if (!auth) {
-                return response.unauthorized({}, res, "Your user id is not registered in our database");
-            }
+            // if (!auth) {
+            //     return response.unauthorized({}, res, "Your user id is not registered in our database");
+            // }
 
-            // @ts-ignore
-            auth.is_sso = decoded.is_sso;
+            // // @ts-ignore
+            // auth.is_sso = decoded.is_sso;
 
-            res.app.locals.auth = auth;
+            // res.app.locals.auth = auth;
 
             return next();
         }
