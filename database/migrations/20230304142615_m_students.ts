@@ -15,7 +15,7 @@ export async function up(knex: Knex): Promise<void> {
         table.string("bio").nullable();
         table.string("website_screenshot").nullable();
         table.string("website_url").nullable();
-        table.date("registered_at").notNullable();
+        table.date("registered_at").nullable();
         table.date("graduated_at").nullable();
         table.uuid("created_by").nullable();
         table.uuid("updated_by").nullable();
