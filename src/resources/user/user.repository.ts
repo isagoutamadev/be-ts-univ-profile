@@ -1,6 +1,8 @@
 import { Student } from "@/models/student.model";
 import { SearchUser, User } from "@/models/user.model";
+import HttpException from "@/utils/exceptions/http.exception";
 import knex from "@/utils/knex/knex"
+import { ResponseCode } from "@/utils/responses/global.response";
 import { Pagination, Paging } from "@/utils/responses/pagination.response";
 
 export class UserRepository {
@@ -144,7 +146,10 @@ export class UserRepository {
                     created_at: knex.raw("now()"),
                 });
             });
-        } catch (error) {
+        } catch (error: any) {
+            if (String(error.message).includes("m_students.m_students_nim_unique")) {
+                throw new HttpException("Nim telah terdaftar", ResponseCode.CONFLICT);
+            }
             throw error;
         }
     }

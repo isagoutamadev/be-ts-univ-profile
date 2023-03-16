@@ -9,6 +9,8 @@ import { authMiddleware } from '@/middlewares/auth.middleware';
 import { AuthService } from '@/resources/auth/auth.service';
 import HttpException from '@/utils/exceptions/http.exception';
 import { JWT } from '@/models/auth.model';
+import { CreateUserSchema } from '@/schemas/user.schema';
+import { UserService } from '../user/user.service';
 
 // const service = new AuthService();
 
@@ -16,6 +18,7 @@ export class AuthController implements Controller {
     public path = '';
     public router = Router();
     private service = new AuthService();
+    private userService = new UserService();
 
     constructor() {
         this.initRoutes();
@@ -38,6 +41,12 @@ export class AuthController implements Controller {
             validate(LoginSchema, ReqType.BODY),
             this.login
         );
+        
+        this.router.post(
+            '/register',
+            validate(CreateUserSchema, ReqType.BODY),
+            this.register
+        );
     }
 
     private login = async (
@@ -51,6 +60,25 @@ export class AuthController implements Controller {
             const result = await this.service.login(body);
 
             return response.global<JWT>(res, {
+                code: ResponseCode.OK,
+                result,
+            });
+        } catch (err: any) {
+            return next(new HttpException(err.message, err.statusCode));
+        }
+    }
+    
+    private register = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { body } = req;
+
+            const result = await this.userService.create(body);
+
+            return response.global(res, {
                 code: ResponseCode.OK,
                 result,
             });

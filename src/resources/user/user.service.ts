@@ -48,7 +48,7 @@ export class UserService {
         }
     }
     
-    public create = async (data: CreateUser, auth: User): Promise<CreateUser> => {
+    public create = async (data: CreateUser, auth?: User): Promise<CreateUser> => {
         try {
             const getUserByEmail = await this.repository.get({email: data.email}, 1, 1);
             if (getUserByEmail.datas.length > 0) {
@@ -60,21 +60,23 @@ export class UserService {
                 throw new HttpException("Username telah digunakan", ResponseCode.CONFLICT);
             }
 
+            const userId = uuid();
             const userCreate = {
-                id: uuid(),
+                id: userId,
                 username: data.username,
                 email: data.email,
                 password: AuthHelper.encrypt(String(data.password)),
                 role: data.role,
-                created_by: auth.id,
+                created_by: auth?.id || userId
             };
 
+            const studentId = uuid();
             const student = {
-                id: uuid(),
+                id: studentId,
                 nim: data.nim,
                 name: data.name,
                 user_id: userCreate.id,
-                created_by: auth.id,
+                created_by: auth?.id || userId
             };
 
             await this.repository.create(userCreate, student);
