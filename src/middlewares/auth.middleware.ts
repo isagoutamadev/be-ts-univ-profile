@@ -29,7 +29,8 @@ export function authMiddleware(isDontGetDetail?: boolean) {
             // // @ts-ignore
             // auth.is_sso = decoded.is_sso;
 
-            // res.app.locals.auth = auth;
+            //@ts-ignore
+            res.app.locals.auth = decoded;
 
             return next();
         }
