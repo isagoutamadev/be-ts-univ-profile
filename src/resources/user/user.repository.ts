@@ -9,39 +9,18 @@ export class UserRepository {
                 "user.id",
                 "user.email",
                 "user.username",
-                "user.role_id",
+                "user.role",
                 knex.raw(`JSON_OBJECT(
-                    'id', employee.id,
-                    'name', employee.name,
-                    'picture', employee.picture,
-                    'address', employee.address
-                ) as employee`),
-                knex.raw(`JSON_OBJECT(
-                    'id', role.id,
-                    'name', role.name
-                ) as role`),
-                knex.raw(`JSON_OBJECT(
-                    'id', mbc.id,
-                    'name', mbc.name
-                ) as branch_company`),
-                knex.raw(`JSON_OBJECT(
-                    'id', company.id,
-                    'name', company.name
-                ) as company`),
+                    'id', student.id,
+                    'nim', student.nim,
+                    'name', student.name,
+                    'avatar', student.avatar
+                ) as student`),
             ];
 
             const query = knex("m_users as user").select(select)
-                .leftJoin("m_roles as role", function () {
-                    this.on("role.id", "user.role_id");
-                })
-                .leftJoin("m_employees as employee", function () {
-                    this.on("employee.id", "user.employee_id");
-                })
-                .leftJoin("m_branch_companies as mbc", function () {
-                    this.on("mbc.id", "employee.branch_company_id");
-                })
-                .leftJoin("m_companies as company", function () {
-                    this.on("company.id", "mbc.company_id");
+                .innerJoin("m_students as student", function () {
+                    this.on("student.user_id", "user.id");
                 });
 
             if (search.id) {
@@ -54,10 +33,6 @@ export class UserRepository {
             
             if (search.username) {
                 query.whereILike("user.username", search.username);
-            }
-            
-            if (search.name) {
-                query.whereILike("employee.name", search.name);
             }
             
 
@@ -74,15 +49,8 @@ export class UserRepository {
                 datas.map((item) => {
                     return {
                         ...item,
-                        // @ts-ignore
-                        role: JSON.parse(item.role),
-                        // @ts-ignore
-                        employee: JSON.parse(item.employee),
-                        // @ts-ignore
-                        branch_company: JSON.parse(item.branch_company),
-                        // @ts-ignore
-                        company: JSON.parse(item.company),
-                    };
+                        student: JSON.parse(item.student),
+                    }
                 }),
                 // @ts-ignore 
                 count.total,
@@ -102,77 +70,25 @@ export class UserRepository {
                 "user.id",
                 "user.email",
                 "user.username",
-                "user.role_id",
+                "user.role",
                 knex.raw(`JSON_OBJECT(
-                    'id', employee.id,
-                    'name', employee.name,
-                    'picture', employee.picture,
-                    'address', employee.address
-                ) as employee`),
-                knex.raw(`JSON_OBJECT(
-                    'id', role.id,
-                    'name', role.name,
-                    'permissions', JSON_ARRAYAGG(permission.name)
-                ) as role`),
-                knex.raw(`JSON_OBJECT(
-                    'id', mbc.id,
-                    'name', mbc.name
-                ) as branch_company`),
-                knex.raw(`JSON_OBJECT(
-                    'id', mc.id,
-                    'name', mc.name
-                ) as company`),
+                    'id', student.id,
+                    'nim', student.nim,
+                    'name', student.name,
+                    'avatar', student.avatar
+                ) as student`),
             ];
 
-            const query = knex("m_users as user").select(select);
-            query.innerJoin("m_employees as employee", function () {
-                this.on("employee.id", "user.employee_id");
-            });
-            query.leftJoin("m_roles as role", function () {
-                this.on("role.id", "user.role_id");
-            });
-
-            query.leftJoin("m_branch_companies as mbc", function () {
-                this.on("mbc.id", "employee.branch_company_id");
-                this.onNull("mbc.deleted_at");
-            });
-            query.leftJoin("m_companies as mc", function () {
-                this.on("mc.id", "mbc.company_id");
-                this.onNull("mc.deleted_at");
-            });
-            
-            query.leftJoin("map_role_permission as mrp", function () {
-                this.on("mrp.role_id", "role.id");
-                this.onNull("mc.deleted_at");
-            });
-
-            query.leftJoin("lt_permissions as permission", function () {
-                this.on("permission.id", "mrp.permission_id");
-                this.onNull("mc.deleted_at");
-            });
-
-            query.where("user.id", id);
-            query.whereNull("user.deleted_at");
-
-            query.groupBy("user.id");
-            query.groupBy("employee.id");
-            query.groupBy("role.id");
-            query.groupBy("mbc.id");
-            query.groupBy("mc.id");
+            const query = knex("m_users as user").select(select)
+                .innerJoin("m_students as student", function () {
+                    this.on("student.user_id", "user.id");
+                });
 
             const user = await query.first();
             if (user) {
                 return {
                     ...user,
-                    // @ts-ignore
-                    role: JSON.parse(user.role),
-                    // @ts-ignore
-                    employee: JSON.parse(user.employee),
-                    // @ts-ignore
-                    branch_company: JSON.parse(user.branch_company),
-                    // @ts-ignore
-                    company: JSON.parse(user.company),
-                    // @ts-ignore
+                    student: JSON.parse(user.student),
                 }
             }
             return undefined;
@@ -186,99 +102,26 @@ export class UserRepository {
             const select = [
                 "user.id",
                 "user.email",
-                "user.role_id",
-                "user.employee_id",
+                "user.username",
+                "user.role",
                 knex.raw(`JSON_OBJECT(
-                    'id', employee.id,
-                    'name', employee.name,
-                    'picture', employee.picture,
-                    'address', employee.address
-                ) as employee`),
-                knex.raw(`JSON_OBJECT(
-                    'id', role.id,
-                    'name', role.name,
-                    'permissions', JSON_ARRAYAGG(
-                        JSON_OBJECT(
-                            'id', permission.id,
-                            'name', permission.name,
-                            'description', permission.description
-                        )
-                    )
-                ) as role`),
-                knex.raw(`JSON_OBJECT(
-                    'id', mbc.id,
-                    'name', mbc.name
-                ) as branch_company`),
-                knex.raw(`JSON_OBJECT(
-                    'id', mc.id,
-                    'name', mc.name
-                ) as company`),
+                    'id', student.id,
+                    'nim', student.nim,
+                    'name', student.name,
+                    'avatar', student.avatar
+                ) as student`),
             ];
 
-            const query = knex("m_users as user").select(select);
-            query.innerJoin("m_employees as employee", function () {
-                this.on("employee.id", "user.employee_id");
-            });
-            query.leftJoin("m_roles as role", function () {
-                this.on("role.id", "user.role_id");
-            });
-
-            query.leftJoin("m_branch_companies as mbc", function () {
-                this.on("mbc.id", "employee.branch_company_id");
-                this.onNull("mbc.deleted_at");
-            });
-            query.leftJoin("m_companies as mc", function () {
-                this.on("mc.id", "mbc.company_id");
-                this.onNull("mc.deleted_at");
-            });
-            
-            query.leftJoin("map_role_permission as mrp", function () {
-                this.on("mrp.role_id", "role.id");
-                this.onNull("mc.deleted_at");
-            });
-
-            query.leftJoin("lt_permissions as permission", function () {
-                this.on("permission.id", "mrp.permission_id");
-                this.onNull("mc.deleted_at");
-            });
-
-            if (search.id) {
-                query.where("user.id", search.id);
-            }
-
-            if (search.email) {
-                query.whereILike("user.email", search.email);
-            }
-            
-            if (search.username) {
-                query.whereILike("user.username", search.username);
-            }
-            
-            if (search.name) {
-                query.whereILike("employee.name", search.name);
-            }
-
-            query.whereNull("user.deleted_at");
-
-            query.groupBy("user.id");
-            query.groupBy("employee.id");
-            query.groupBy("role.id");
-            query.groupBy("mbc.id");
-            query.groupBy("mc.id");
+            const query = knex("m_users as user").select(select)
+                .innerJoin("m_students as student", function () {
+                    this.on("student.user_id", "user.id");
+                });
 
             const user = await query.first();
             if (user) {
                 return {
                     ...user,
-                    // @ts-ignore
-                    role: JSON.parse(user.role),
-                    // @ts-ignore
-                    employee: JSON.parse(user.employee),
-                    // @ts-ignore
-                    branch_company: JSON.parse(user.branch_company),
-                    // @ts-ignore
-                    company: JSON.parse(user.company),
-                    // @ts-ignore
+                    student: JSON.parse(user.student),
                 }
             }
             return undefined;

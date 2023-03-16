@@ -28,7 +28,7 @@ export class UserController implements Controller {
         this.router.get(
             '/',
             authMiddleware(),
-            permissionMiddleware(['user_view']),
+            // permissionMiddleware(['user_view']),
             validate(PagingSchema, ReqType.QUERY),
             validate(UserSearchSchema, ReqType.QUERY),
             this.getUsers
@@ -37,14 +37,14 @@ export class UserController implements Controller {
         this.router.get(
             '/:id',
             authMiddleware(),
-            permissionMiddleware(['user_view']),
+            // permissionMiddleware(['user_view']),
             this.detail
         );
 
         this.router.put(
             '/:id',
             authMiddleware(),
-            permissionMiddleware(['user_update']),
+            // permissionMiddleware(['user_update']),
             validate(UUIDSchema, ReqType.PARAMS),
             validate(UserUpdateSchema, ReqType.BODY),
             this.update
