@@ -6,6 +6,16 @@ export interface User {
     deleted_by?: string,
 }
 
+export interface CreateUser {
+    email?: string,
+    username?: string,
+    password?: string,
+    role?: string,
+    name?: string,
+    nim?: string,
+    created_by?: string
+}
+
 export interface SearchUser {
     id?: string,
     email?: string,

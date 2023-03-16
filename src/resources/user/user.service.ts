@@ -1,4 +1,4 @@
-import { SearchUser, User } from "@/models/user.model";
+import { CreateUser, SearchUser, User } from "@/models/user.model";
 import HttpException from "@/utils/exceptions/http.exception";
 import { ResponseCode } from "@/utils/responses/global.response";
 import { UserRepository } from "./user.repository";
@@ -48,16 +48,38 @@ export class UserService {
         }
     }
     
-    public create = async (user: User): Promise<User> => {
+    public create = async (data: CreateUser, auth: User): Promise<CreateUser> => {
         try {
-            const getUserByEmail = await this.repository.get({email: user.email}, 1, 1);
+            const getUserByEmail = await this.repository.get({email: data.email}, 1, 1);
             if (getUserByEmail.datas.length > 0) {
                 throw new HttpException("Email telah digunakan", ResponseCode.CONFLICT);
             }
+            
+            const getUserByUsername = await this.repository.get({username: data.username}, 1, 1);
+            if (getUserByUsername.datas.length > 0) {
+                throw new HttpException("Username telah digunakan", ResponseCode.CONFLICT);
+            }
 
-            await this.repository.create(user);
+            const userCreate = {
+                id: uuid(),
+                username: data.username,
+                email: data.email,
+                password: AuthHelper.encrypt(String(data.password)),
+                role: data.role,
+                created_by: auth.id,
+            };
 
-            return user;
+            const student = {
+                id: uuid(),
+                nim: data.nim,
+                name: data.name,
+                user_id: userCreate.id,
+                created_by: auth.id,
+            };
+
+            await this.repository.create(userCreate, student);
+
+            return data;
         } catch (error) {
             throw error;
         }

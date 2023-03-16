@@ -3,7 +3,7 @@ import { NextFunction, Router, Request, Response } from 'express';
 import response from '@/helpers/response.helper';
 import { ResponseCode } from '@/utils/responses/global.response';
 import { User } from '@/models/user.model';
-import { UserSearchSchema, UserUpdateSchema } from '@/schemas/user.schema';
+import { CreateUserSchema, UserSearchSchema, UserUpdateSchema } from '@/schemas/user.schema';
 import { validate, ReqType } from '@/middlewares/validate.middleware';
 import { authMiddleware } from '@/middlewares/auth.middleware';
 import HttpException from '@/utils/exceptions/http.exception';
@@ -32,6 +32,14 @@ export class UserController implements Controller {
             validate(PagingSchema, ReqType.QUERY),
             validate(UserSearchSchema, ReqType.QUERY),
             this.getUsers
+        );
+        
+        this.router.post(
+            '/',
+            authMiddleware(),
+            // permissionMiddleware(['user_view']),
+            validate(CreateUserSchema, ReqType.BODY),
+            this.create
         );
         
         this.router.get(
@@ -103,12 +111,9 @@ export class UserController implements Controller {
     ): Promise<Response | void> => {
         try {
             const { auth } = res.app.locals;
+            console.log(auth);
 
-            const {user} = req.body;
-            const result = await this.service.create({
-                ...user,
-                created_by: auth.id,
-            });
+            const result = await this.service.create(req.body, auth);
             
             return response.created<User>(result, res);
         } catch (err: any) {

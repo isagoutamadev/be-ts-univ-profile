@@ -1,3 +1,4 @@
+import { Student } from "@/models/student.model";
 import { SearchUser, User } from "@/models/user.model";
 import knex from "@/utils/knex/knex"
 import { Pagination, Paging } from "@/utils/responses/pagination.response";
@@ -130,11 +131,16 @@ export class UserRepository {
         }
     }
 
-    async create(user: User): Promise<void> {
+    async create(user: User, student: Student): Promise<void> {
         try {
             await knex.transaction(async trx => {
                 await trx("m_users").insert({
                     ...user,
+                    created_at: knex.raw("now()"),
+                });
+
+                await trx("m_students").insert({
+                    ...student,
                     created_at: knex.raw("now()"),
                 });
             });
