@@ -3,7 +3,7 @@ import { NextFunction, Router, Request, Response } from 'express';
 import response from '@/helpers/response.helper';
 import { ResponseCode } from '@/utils/responses/global.response';
 import { Student } from '@/models/student.model';
-import {  } from '@/schemas/student.schema';
+import { UpdateStudentSchema } from '@/schemas/student.schema';
 import { validate, ReqType } from '@/middlewares/validate.middleware';
 import { authMiddleware } from '@/middlewares/auth.middleware';
 import HttpException from '@/utils/exceptions/http.exception';
@@ -35,6 +35,14 @@ export class StudentController implements Controller {
             validate(UUIDSchema, ReqType.PARAMS),
             this.findById
         );
+        
+        this.router.put(
+            '/:id',
+            authMiddleware(),
+            validate(UUIDSchema, ReqType.PARAMS),
+            validate(UpdateStudentSchema, ReqType.BODY),
+            this.update
+        );
     }
 
     private get = async (
@@ -65,6 +73,23 @@ export class StudentController implements Controller {
             const {id} = req.params;
 
             const result = await this.service.find({id});
+
+            return response.ok(result, res);
+        } catch (err: any) {
+            return next(new HttpException(err.message, err.statusCode));
+        }
+    }
+    
+    private update = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { auth } = req.app.locals;
+            const { id } = req.params;
+
+            const result = await this.service.update({id, ...req.body}, auth);
 
             return response.ok(result, res);
         } catch (err: any) {

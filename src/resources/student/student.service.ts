@@ -1,8 +1,9 @@
-import { Student } from "@/models/student.model";
+import { Student, UpdateStudent } from "@/models/student.model";
 import { Paging } from "@/utils/responses/pagination.response";
 import { StudentsRepository } from "./student.repository";
 import HttpException from "@/utils/exceptions/http.exception";
 import { ResponseCode } from "@/utils/responses/global.response";
+import { User } from "@/models/user.model";
 
 export class StudentsService {
     private repository = new StudentsRepository();
@@ -25,6 +26,18 @@ export class StudentsService {
             }
 
             throw new HttpException("Data siswa tidak ditemukan", ResponseCode.NOT_FOUND);
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    public update = async (data: UpdateStudent, auth: User): Promise<Student> => {
+        try {
+            data.updated_by = auth.id;
+
+            await this.repository.update(data);
+
+            return data;
         } catch (error) {
             throw error;
         }
