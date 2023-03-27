@@ -12,6 +12,8 @@ export class TagRepository {
 
             const query = knex("m_tags as tag").select(select);
 
+            query.whereNull("tag.deleted_at");
+
             const offset = limit * page - limit;
             const queryCount = knex().count("id as total").from(knex.raw(`(${query.toQuery()}) x`)).first();
 
@@ -32,6 +34,27 @@ export class TagRepository {
             throw error;
         }
     }
+    
+    async find(search: Tag): Promise<Tag> {
+        try {
+            const select = [
+                "tag.id",
+                "tag.name",
+            ];
+
+            const query = knex("m_tags as tag").select(select);
+
+            query.whereNull("tag.deleted_at");
+
+            if (search.id) {
+                query.where("tag.id", search.id);
+            }
+
+            return await query.first();
+        } catch (error) {
+            throw error;
+        }
+    }
 
     async create(data: Tag): Promise<void> {
         try {
@@ -39,6 +62,17 @@ export class TagRepository {
                 ...data,
                 created_at: knex.raw("now()"),
             });
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    async delete(data: Tag): Promise<void> {
+        try {
+            await knex("m_tags").update({
+                ...data,
+                deleted_at: knex.raw("now()"),
+            }).where("id", data.id);
         } catch (error) {
             throw error;
         }

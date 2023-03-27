@@ -10,6 +10,7 @@ import HttpException from '@/utils/exceptions/http.exception';
 import { TagService } from './tag.service';
 import { Paging } from '@/utils/responses/pagination.response';
 import { PagingSchema } from '@/schemas/paging.schema';
+import { UUIDSchema } from '@/schemas/global.schema';
 
 export class TagController implements Controller {
     public path = 'tags';
@@ -27,11 +28,23 @@ export class TagController implements Controller {
             validate(PagingSchema, ReqType.QUERY),
             this.get
         );
+        this.router.get(
+            '/:id',
+            authMiddleware(),
+            validate(UUIDSchema, ReqType.PARAMS),
+            this.detail
+        );
         this.router.post(
             '/',
             authMiddleware(),
             validate(CreateTagSchema, ReqType.BODY),
             this.create
+        );
+        this.router.delete(
+            '/:id',
+            authMiddleware(),
+            validate(UUIDSchema, ReqType.PARAMS),
+            this.delete
         );
     }
 
@@ -53,13 +66,50 @@ export class TagController implements Controller {
         }
     }
     
+    private detail = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const {
+                id
+            } = req.params;
+            const result = await this.service.find({id});
+
+            return response.ok(result, res);
+        } catch (err: any) {
+            return next(new HttpException(err.message, err.statusCode));
+        }
+    }
+    
     private create = async (
         req: Request,
         res: Response,
         next: NextFunction
     ): Promise<Response | void> => {
         try {
-            const result = await this.service.create(req.body);
+            const { auth } = req.app.locals;
+            const result = await this.service.create(req.body, auth);
+
+            return response.ok(result, res);
+        } catch (err: any) {
+            return next(new HttpException(err.message, err.statusCode));
+        }
+    }
+    
+    private delete = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { auth } = req.app.locals;
+            const {
+                id
+            } = req.params;
+            
+            const result = await this.service.delete({id}, auth);
 
             return response.ok(result, res);
         } catch (err: any) {
