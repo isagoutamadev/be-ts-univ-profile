@@ -47,6 +47,7 @@ import { Paging } from "@/utils/responses/pagination.response";
 import { {REPOSITORY_NAME} } from "./{MODULE_NAME}.repository";
 import HttpException from "@/utils/exceptions/http.exception";
 import { ResponseCode } from "@/utils/responses/global.response";
+import { v4 as uuid } from "uuid";
 
 export class {SERVICE_NAME} {
     private repository = new {REPOSITORY_NAME}();
@@ -58,7 +59,7 @@ export class {SERVICE_NAME} {
         }
     }
 }`;
-const toQuery = "`${query.toQuery()} x`"
+const toQuery = "`(${query.toQuery()}) x`"
 const REPOSITORY = `import { {MODEL_NAME} } from "@/models/{MODULE_NAME}.model";
 import knex from "@/utils/knex/knex"
 import { Pagination, Paging } from "@/utils/responses/pagination.response";
