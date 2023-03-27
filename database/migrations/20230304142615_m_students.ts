@@ -4,6 +4,11 @@ export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable("m_students", function (table) {
         table.uuid("id").primary().notNullable();
         table
+            .uuid("major_id")
+            .nullable()
+            .references("m_majors.id")
+            .onDelete("cascade");
+        table
             .uuid("user_id")
             .unique()
             .notNullable()
