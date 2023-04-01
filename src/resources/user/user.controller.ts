@@ -3,7 +3,7 @@ import { NextFunction, Router, Request, Response } from 'express';
 import response from '@/helpers/response.helper';
 import { ResponseCode } from '@/utils/responses/global.response';
 import { User } from '@/models/user.model';
-import { CreateUserSchema, UserSearchSchema, UserUpdateSchema } from '@/schemas/user.schema';
+import { CreateUserSchema, UpdateUserSchema, UserSearchSchema } from '@/schemas/user.schema';
 import { validate, ReqType } from '@/middlewares/validate.middleware';
 import { authMiddleware } from '@/middlewares/auth.middleware';
 import HttpException from '@/utils/exceptions/http.exception';
@@ -54,7 +54,7 @@ export class UserController implements Controller {
             authMiddleware(),
             // permissionMiddleware(['user_update']),
             validate(UUIDSchema, ReqType.PARAMS),
-            validate(UserUpdateSchema, ReqType.BODY),
+            validate(UpdateUserSchema, ReqType.BODY),
             this.update
         );
     }
@@ -128,11 +128,10 @@ export class UserController implements Controller {
     ): Promise<Response | void> => {
         try {
             const { auth } = res.app.locals;
-            const { uuid } = req.params;
-            const {user, employee} = req.body;
+            const { id } = req.params;
             const result = await this.service.update({
-                ...user,
-                uuid: uuid,
+                ...req.body,
+                id: id,
                 updated_by: auth.id,
             });
             
