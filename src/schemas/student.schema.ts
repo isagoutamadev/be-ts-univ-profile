@@ -4,7 +4,7 @@ export const UpdateStudentSchema = Joi.object({
     name: Joi.string().min(3).max(100).required(),
     major_id: Joi.string().uuid().required(),
     avatar: Joi.string().min(3),
-    nim: Joi.number().min(5).required(),
+    nim: Joi.number().min(5).allow(null),
     bio: Joi.string().min(0).required(),
     registered_at: Joi.string().isoDate().required(),
     graduated_at: Joi.string().isoDate().allow(null),
