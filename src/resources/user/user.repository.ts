@@ -120,6 +120,10 @@ export class UserRepository {
                     this.on("student.user_id", "user.id");
                 });
 
+            if (search.id) {
+                query.where("user.id", search.id);
+            }
+
             const user = await query.first();
             if (user) {
                 return {
