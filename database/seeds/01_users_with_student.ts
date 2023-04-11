@@ -1,6 +1,5 @@
 import { Knex } from "knex";
 import AuthHelper from "../../src/helpers/auth.helper";
-import { v4 } from "uuid";
 
 export async function seed(knex: Knex): Promise<void> {
     // Inserts seed entries
@@ -10,34 +9,34 @@ export async function seed(knex: Knex): Promise<void> {
         {
             id: "974c97aa-b068-4cd9-bce4-07311e2449a3",
             username: "admin",
-            email: "admin@univ.com", 
+            email: "admin@univ.com",
             password: AuthHelper.encrypt("$admin#4dm1n"),
             role: "admin",
-            created_at: knex.raw("now()")
+            created_at: knex.raw("now()"),
         },
         {
             id: "c6e9d6dd-abbd-4e58-a168-e057ba36fc69",
             username: "isagoutama",
-            email: "isa@univ.com", 
+            email: "isa@univ.com",
             password: AuthHelper.encrypt("password"),
             role: "student",
-            created_at: knex.raw("now()")
+            created_at: knex.raw("now()"),
         },
         {
             id: "e77d7540-c1aa-46ac-991e-fab9cd6aed63",
             username: "bariqdh",
-            email: "bariq@univ.com", 
+            email: "bariq@univ.com",
             password: AuthHelper.encrypt("password"),
             role: "student",
-            created_at: knex.raw("now()")
+            created_at: knex.raw("now()"),
         },
         {
             id: "1e891933-b328-4453-b671-5b111f28c75e",
             username: "febytri",
-            email: "feby@univ.com", 
+            email: "feby@univ.com",
             password: AuthHelper.encrypt("password"),
             role: "student",
-            created_at: knex.raw("now()")
+            created_at: knex.raw("now()"),
         },
     ]);
 
@@ -67,4 +66,4 @@ export async function seed(knex: Knex): Promise<void> {
             graduated_at: "2021-10-19", // Sudah  lulus
         },
     ]);
-};
+}

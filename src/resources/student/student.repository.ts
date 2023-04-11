@@ -1,10 +1,14 @@
 import DataHelper from "@/helpers/data.helper";
 import { Student, UpdateStudent } from "@/models/student.model";
-import knex from "@/utils/knex/knex"
+import knex from "@/utils/knex/knex";
 import { Pagination, Paging } from "@/utils/responses/pagination.response";
 
 export class StudentsRepository {
-    async get(search: Student, page: number, limit: number): Promise<Paging<Student>> {
+    async get(
+        search: Student,
+        page: number,
+        limit: number
+    ): Promise<Paging<Student>> {
         try {
             const select = [
                 "student.id",
@@ -24,11 +28,14 @@ export class StudentsRepository {
             query.whereNull("student.deleted_at");
 
             const offset = limit * page - limit;
-            const queryCount = knex().count("id as total").from(knex.raw(`(${query.toQuery()}) x`)).first();
+            const queryCount = knex()
+                .count("id as total")
+                .from(knex.raw(`(${query.toQuery()}) x`))
+                .first();
 
             const [datas, count] = await Promise.all([
                 await query.limit(limit).offset(offset),
-                await queryCount
+                await queryCount,
             ]);
             const pagination = new Pagination<Student>(
                 datas,
@@ -43,8 +50,8 @@ export class StudentsRepository {
             throw error;
         }
     }
-    
-    async find(search: Student): Promise<Student|undefined> {
+
+    async find(search: Student): Promise<Student | undefined> {
         try {
             const select = [
                 "student.id",
@@ -77,7 +84,7 @@ export class StudentsRepository {
                 this.on("user.id", "student.user_id");
                 this.onNull("user.deleted_at");
             });
-            
+
             query.leftJoin("m_majors as major", function () {
                 this.on("major.id", "student.major_id");
                 this.onNull("major.deleted_at");
@@ -86,12 +93,12 @@ export class StudentsRepository {
             query.leftJoin("map_student_interest_tags as msit", function () {
                 this.on("msit.student_id", "student.id");
             });
-            
+
             query.leftJoin("m_tags as tag", function () {
                 this.on("tag.id", "msit.tag_id");
                 this.onNull("tag.deleted_at");
             });
-            
+
             query.whereNull("student.deleted_at");
 
             if (search.id) {
@@ -102,6 +109,9 @@ export class StudentsRepository {
             const result = await query.first();
 
             if (result) {
+                //@ts-ignore
+                // console.log(query.toQuery());
+                // return query.toQuery();
                 return DataHelper.objectParse(result);
             }
 
@@ -113,22 +123,28 @@ export class StudentsRepository {
 
     async update(data: UpdateStudent): Promise<void> {
         try {
-            await knex.transaction(async trx => {
-                await trx("map_student_interest_tags").delete().where("student_id", data.id);
-    
-                await trx("map_student_interest_tags").insert(data.interest_tag_ids?.map(tagId => {
-                    return {
-                        tag_id: tagId,
-                        student_id: data.id,
-                    }
-                }));
+            await knex.transaction(async (trx) => {
+                await trx("map_student_interest_tags")
+                    .delete()
+                    .where("student_id", data.id);
+
+                await trx("map_student_interest_tags").insert(
+                    data.interest_tag_ids?.map((tagId) => {
+                        return {
+                            tag_id: tagId,
+                            student_id: data.id,
+                        };
+                    })
+                );
 
                 delete data.interest_tag_ids;
-    
-                await trx("m_students").update({
-                    ...data,
-                    updated_at: knex.raw("now()"),
-                }).where("id", data.id);
+
+                await trx("m_students")
+                    .update({
+                        ...data,
+                        updated_at: knex.raw("now()"),
+                    })
+                    .where("id", data.id);
             });
         } catch (error) {
             throw error;
