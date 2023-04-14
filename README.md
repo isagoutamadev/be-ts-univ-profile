@@ -49,4 +49,17 @@ Copy file .env.example and rename it to .env
 ```bash
   yarn build && yarn start
 ```
+
+## Boilerplate
+- This project is using modular design pattern, to create new module files and folder automatically, run command bellow
+
+```bash
+  node boilerplate.js make:module {{MODULE_NAME}}
+```
+
+- example:
+
+```bash
+  node boilerplate.js make:module user-profile
+```
     
