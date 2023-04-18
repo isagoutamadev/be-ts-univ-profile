@@ -8,6 +8,7 @@ import { StudentController } from "./resources/student/student.controller";
 import { TagController } from "./resources/tag/tag.controller";
 import { UploadController } from "./resources/upload/upload.controller";
 import { UserController } from "./resources/user/user.controller";
+import { CreationController } from "./resources/creation/creation.controller";
 
 const app = new App([
     new AuthController(),
@@ -16,6 +17,7 @@ const app = new App([
     new StudentController(),
     new TagController(),
     new MajorController(),
+    new CreationController(),
 ], Number(process.env.PORT || 8000));
 
 app.listen();

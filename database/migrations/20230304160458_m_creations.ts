@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<void> {
             .notNullable()
             .references("m_students.id")
             .onDelete("cascade");
-        table.string("title").unique().notNullable();
+        table.string("title").notNullable();
         table.text("description").notNullable();
         table.uuid("created_by").nullable();
         table.uuid("updated_by").nullable();
