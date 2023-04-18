@@ -1,9 +1,12 @@
+import { Student } from "./student.model"
+
 export interface User {
     id?: string,
     email?: string,
     username?: string,
     password?: string,
     deleted_by?: string,
+    student?: Student,
 }
 
 export interface CreateUser {
