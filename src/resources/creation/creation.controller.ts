@@ -64,6 +64,10 @@ export class CreationController implements Controller {
         next: NextFunction
     ): Promise<Response | void> => {
         try {
+            const { limit, page } = req.query;
+            const result = await this.service.get(req.query, Number(page), Number(limit));
+
+            return response.ok(result, res);
         } catch (err: any) {
             return next(new HttpException(err.message, err.statusCode));
         }
