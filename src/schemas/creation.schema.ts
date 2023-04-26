@@ -5,6 +5,9 @@ export const CreateCreationSchema = Joi.object({
         .min(5)
         .max(30)
         .required(),
+    cover: Joi.string()
+        .min(5)
+        .required(),
     description: Joi.string().min(0).allow(null),
     tag_ids: Joi.array()
         .items(Joi.string().uuid().required())

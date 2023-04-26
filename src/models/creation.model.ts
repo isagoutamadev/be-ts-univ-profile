@@ -4,6 +4,7 @@ import { CreationContent } from "./creation-content.model";
 export interface Creation {
     id?: string,
     title?: string,
+    cover?: string,
     description?: string,
     student_id?: string,
     created_by?: string,
@@ -15,6 +16,7 @@ export interface CreateCreation {
     id?: string,
     student_id?: string,
     title?: string,
+    cover?: string,
     description?: string,
     tag_ids?: string[],
     contents?: CreationContent[],
