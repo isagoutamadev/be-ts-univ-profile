@@ -9,6 +9,7 @@ export async function up(knex: Knex): Promise<void> {
             .references("m_students.id")
             .onDelete("cascade");
         table.string("title").notNullable();
+        table.string("cover").nullable();
         table.text("description").notNullable();
         table.uuid("created_by").nullable();
         table.uuid("updated_by").nullable();

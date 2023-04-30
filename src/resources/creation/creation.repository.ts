@@ -5,11 +5,43 @@ import { Pagination, Paging } from "@/utils/responses/pagination.response";
 import { v4 as uuid } from "uuid";
 
 export class CreationRepository {
+    async getTypes(search: Creation, page: number, limit: number): Promise<Paging<Creation>> {
+        try {
+            const select = [
+                "type.id",
+                "type.name",
+                "type.guide_url",
+            ];
+
+            const query = knex("lt_creation_content_types as type").select(select);
+
+            const offset = limit * page - limit;
+            const queryCount = knex().count("id as total").from(knex.raw(`(${query.toQuery()}) x`)).first();
+
+            const [datas, count] = await Promise.all([
+                await query.limit(limit).offset(offset),
+                await queryCount
+            ]);
+            const pagination = new Pagination<Creation>(
+                datas.map(item => DataHelper.objectParse(item)),
+                //@ts-ignore
+                count.total,
+                page,
+                limit
+            );
+
+            return pagination.getPaging();
+        } catch (error) {
+            throw error;
+        }
+    }
+    
     async get(search: Creation, page: number, limit: number): Promise<Paging<Creation>> {
         try {
             const select = [
                 "creation.id",
                 "creation.title",
+                "creation.cover",
                 "creation.description",
                 knex.raw(`IF(COUNT(tag.id) = 0, '[]', JSON_ARRAYAGG(JSON_OBJECT(
                     'id', tag.id,

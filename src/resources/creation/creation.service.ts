@@ -8,6 +8,16 @@ import { User } from "@/models/user.model";
 
 export class CreationService {
     private repository = new CreationRepository();
+    public getTypes = async (search: Creation, page: number, limit: number): Promise<Paging<Creation>> => {
+        try {            
+            const result = await this.repository.getTypes(search, page, limit);
+
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    }
+    
     public get = async (search: Creation, page: number, limit: number): Promise<Paging<Creation>> => {
         try {            
             const result = await this.repository.get(search, page, limit);
