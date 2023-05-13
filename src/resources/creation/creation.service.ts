@@ -28,6 +28,20 @@ export class CreationService {
         }
     }
     
+    public find = async (search: Creation): Promise<Creation> => {
+        try {            
+            const result = await this.repository.find(search);
+
+            if (result) {
+                return result;
+            }
+
+            throw new HttpException("Karya tidak ditemukan", ResponseCode.NOT_FOUND);
+        } catch (error) {
+            throw error;
+        }
+    }
+    
     public create = async (data: CreateCreation, auth: User): Promise<Creation> => {
         try {
             data.id = uuid();

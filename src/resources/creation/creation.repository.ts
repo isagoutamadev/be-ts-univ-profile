@@ -88,6 +88,61 @@ export class CreationRepository {
         }
     }
     
+    async find(search: Creation): Promise<Creation|undefined> {
+        try {
+            const select = [
+                "creation.id",
+                "creation.title",
+                "creation.cover",
+                "creation.description",
+                knex.raw(`IF(COUNT(tag.id) = 0, '[]', JSON_ARRAYAGG(JSON_OBJECT(
+                    'id', tag.id,
+                    'name', tag.name
+                ))) as tags`),
+                knex.raw(`JSON_ARRAYAGG(JSON_OBJECT(
+                    'id', content.id,
+                    'filename', content.filename,
+                    'embed_code', content.embed_code
+                )) as contents`),
+            ];
+
+            const query = knex("m_creations as creation").select(select);
+
+            query.innerJoin("m_students as student", function () {
+                this.on("student.id", "creation.student_id");
+                this.onNull("student.deleted_at");
+            });
+            
+            query.leftJoin("map_creation_tags as mct", function () {
+                this.on("mct.creation_id", "creation.id");
+            });
+            
+            query.leftJoin("m_tags as tag", function () {
+                this.on("tag.id", "mct.tag_id");
+                this.onNull("tag.deleted_at");
+            });
+            
+            query.leftJoin("m_creation_contents as content", function () {
+                this.on("content.creation_id", "creation.id");
+                this.onNull("tag.deleted_at");
+            });
+
+            if (search.id) {
+                query.where("creation.id", search.id);
+            }
+
+            query.groupBy("creation.id");
+
+            const result = await query.first();
+
+            if (result) {
+                return DataHelper.objectParse(result);
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+    
     async create(data: CreateCreation): Promise<void> {
         try {
             await knex.transaction(async trx => {

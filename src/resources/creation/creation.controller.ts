@@ -10,6 +10,7 @@ import HttpException from "@/utils/exceptions/http.exception";
 import { CreationService } from "./creation.service";
 import { Paging } from "@/utils/responses/pagination.response";
 import { PagingSchema } from "@/schemas/paging.schema";
+import { UUIDSchema } from "@/schemas/global.schema";
 
 export class CreationController implements Controller {
     public path = "creations";
@@ -41,6 +42,13 @@ export class CreationController implements Controller {
             validate(CreateCreationSchema, ReqType.BODY),
             this.create
         );
+
+        this.router.get(
+            "/:id",
+            authMiddleware(),
+            validate(UUIDSchema, ReqType.PARAMS),
+            this.detail
+        );
     }
 
     private getTypes = async (
@@ -66,6 +74,22 @@ export class CreationController implements Controller {
         try {
             const { limit, page } = req.query;
             const result = await this.service.get(req.query, Number(page), Number(limit));
+
+            return response.ok(result, res);
+        } catch (err: any) {
+            return next(new HttpException(err.message, err.statusCode));
+        }
+    };
+    
+    private detail = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { id } = req.params;
+
+            const result = await this.service.find({id});
 
             return response.ok(result, res);
         } catch (err: any) {
