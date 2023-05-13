@@ -1,0 +1,684 @@
+{
+	"info": {
+		"_postman_id": "fab9369a-e2e9-4dea-8961-a65d56430c78",
+		"name": "Univ Profile Feby",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "uploads",
+			"item": [
+				{
+					"name": "Upload single image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/User/Pictures/png-transparent-qr-code-information-qr-code-android-qrcode-text-rectangle-monochrome.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{local}}/uploads/image",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"uploads",
+								"image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show File",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/uploaded/:filename",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"uploaded",
+								":filename"
+							],
+							"variable": [
+								{
+									"key": "filename",
+									"value": "1679954453992-323145411.png"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "majors",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/majors",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"majors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"TEST\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/majors",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"majors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/majors/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"majors",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "f09f3f9e-8072-4864-b947-988bf5ffcd5b"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Desain Komunikasi Visual (DKV)\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/majors/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"majors",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "a84b80ec-5e77-461d-84f1-fbe65a6076b7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/majors/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"majors",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "f1fba6d6-c9cb-4462-89c9-84bdf0344ed5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/users",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@test.com\",\r\n    \"username\": \"testing123\",\r\n    \"password\": \"testing123\",\r\n    \"role\": \"student\",\r\n    \"name\": \"Tes Ter\",\r\n    \"nim\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/users",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/users/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "c6e9d6dd-abbd-4e58-a168-e057ba36fc69"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@test.com\",\r\n    \"username\": \"testing123\",\r\n    \"password\": \"testing123\",\r\n    \"role\": \"student\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/users/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "c970c2fa-e21d-4ee9-84e4-db12accdfb1f"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "students",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/students",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"students"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/students/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"students",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "99b95df0-9136-4913-a90d-03d066c1b3d9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"avatar\": \"1679954453992-323145411.png\",\r\n    \"major_id\": \"6609e875-e99e-4c08-9c1b-8653b2335802\",\r\n    \"website_url\": \"https://github.com/BariqDharmawan\",\r\n    \"website_screenshot\": \"1679954453992-323145411.png\",\r\n    \"name\": \"Muhammad Bariq Dharmawan\",\r\n    \"nim\": \"112233\",\r\n    \"bio\": \"\",\r\n    \"registered_at\": \"2019-10-28\",\r\n    \"interest_tag_ids\": [\r\n        \"0ea17aea-f5da-4e7a-b1a4-95b9f5ebdf00\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/students/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"students",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "99b95df0-9136-4913-a90d-03d066c1b3d9"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "tags",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/tags",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"TEST\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/tags",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/tags/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"tags",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2fa220a9-268e-4436-9877-1687ebbf7c17"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/tags/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"tags",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2fa220a9-268e-4436-9877-1687ebbf7c17"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "creations",
+			"item": [
+				{
+					"name": "Content Types",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/creations/contents/types",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"creations",
+								"contents",
+								"types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/creations",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"creations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Karya Gambar Bangunan\",\r\n    \"description\": \"Ini adalah kreasi dari gambar bangunan saya\",\r\n    \"tag_ids\": [\r\n        \"1268b7a6-0c5c-40a6-b928-d95ecd1c97cc\"\r\n    ],\r\n    \"contents\": [\r\n        {\r\n            \"filename\": \"1679954453992-323145411.png\"\r\n        },\r\n        {\r\n            \"embed_code\": \"<iframe width=\\\"560\\\" height=\\\"315\\\" src=\\\"https:\\/\\/www.youtube.com\\/embed\\/dEGJeVnWZAA\\\" title=\\\"YouTube video player\\\" frameborder=\\\"0\\\" allow=\\\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\\\" allowfullscreen><\\/iframe>\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/creations",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"creations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/tags/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"tags",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2fa220a9-268e-4436-9877-1687ebbf7c17"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/tags/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"tags",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2fa220a9-268e-4436-9877-1687ebbf7c17"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username_or_email\": \"isa@univ.com\",\r\n    \"password\": \"password\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/login",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"test2@test.com\",\r\n    \"username\": \"testing112\",\r\n    \"password\": \"testing123\",\r\n    \"role\": \"student\",\r\n    \"name\": \"Tes Ter\",\r\n    \"nim\": \"320101\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{local}}/register",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "local",
+			"value": "http://localhost:8000/api/v1",
+			"type": "default"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM2ZTlkNmRkLWFiYmQtNGU1OC1hMTY4LWUwNTdiYTM2ZmM2OSIsImlhdCI6MTY3ODk2ODY5MCwiZXhwIjoxNjg5MzM2NjkwfQ.brQNsSlxTVbSy7ufJ_VbWEx54zVRxt9AwzK3Hdg4DUA",
+			"type": "default"
+		}
+	]
+}
