@@ -149,6 +149,7 @@ export class CreationRepository {
                 await trx("m_creations").insert({
                     id: data.id,
                     title: data.title,
+                    cover: data.cover,
                     description: data.description,
                     created_by: data.created_by,
                     student_id: data.student_id,
