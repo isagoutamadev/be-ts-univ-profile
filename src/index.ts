@@ -9,6 +9,7 @@ import { TagController } from "./resources/tag/tag.controller";
 import { UploadController } from "./resources/upload/upload.controller";
 import { UserController } from "./resources/user/user.controller";
 import { CreationController } from "./resources/creation/creation.controller";
+import { FaqsController } from "./resources/faqs/faqs.controller";
 
 const app = new App([
     new AuthController(),
@@ -18,6 +19,7 @@ const app = new App([
     new TagController(),
     new MajorController(),
     new CreationController(),
+    new FaqsController(),
 ], Number(process.env.PORT || 8000));
 
 app.listen();
