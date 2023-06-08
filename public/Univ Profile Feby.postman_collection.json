@@ -472,6 +472,135 @@
 			]
 		},
 		{
+			"name": "faqs",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/faqs",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"faqs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"question\": \"TEST?\",\r\n    \"answer\": \"test Answer\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/faqs",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"faqs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/faqs/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"faqs",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "66ca30f3-3577-4989-872b-728e1e13b605"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"question\": \"TEST?\",\r\n    \"answer\": \"test Answer update\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{local}}/faqs/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"faqs",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "66ca30f3-3577-4989-872b-728e1e13b605"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{local}}/faqs/:id",
+							"host": [
+								"{{local}}"
+							],
+							"path": [
+								"faqs",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "66ca30f3-3577-4989-872b-728e1e13b605"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "creations",
 			"item": [
 				{
@@ -542,18 +671,18 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{local}}/tags/:id",
+							"raw": "{{local}}/creations/:id",
 							"host": [
 								"{{local}}"
 							],
 							"path": [
-								"tags",
+								"creations",
 								":id"
 							],
 							"variable": [
 								{
 									"key": "id",
-									"value": "2fa220a9-268e-4436-9877-1687ebbf7c17"
+									"value": "28755c40-0d20-40f9-9d19-a8087e3919aa"
 								}
 							]
 						}
