@@ -24,13 +24,13 @@ export class TagController implements Controller {
     private initRoutes(): void {
         this.router.get(
             '/',
-            authMiddleware(),
+            // authMiddleware(),
             validate(PagingSchema, ReqType.QUERY),
             this.get
         );
         this.router.get(
             '/:id',
-            authMiddleware(),
+            // authMiddleware(),
             validate(UUIDSchema, ReqType.PARAMS),
             this.detail
         );

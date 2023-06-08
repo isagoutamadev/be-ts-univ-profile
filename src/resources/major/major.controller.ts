@@ -24,7 +24,7 @@ export class MajorController implements Controller {
     private initRoutes(): void {
         this.router.get(
             '/',
-            authMiddleware(),
+            // authMiddleware(),
             validate(PagingSchema, ReqType.QUERY),
             this.get
         );
@@ -38,7 +38,7 @@ export class MajorController implements Controller {
         
         this.router.get(
             '/:id',
-            authMiddleware(),
+            // authMiddleware(),
             validate(UUIDSchema, ReqType.PARAMS),
             this.detail
         );

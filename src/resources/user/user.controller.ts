@@ -27,7 +27,7 @@ export class UserController implements Controller {
     private initRoutes(): void {
         this.router.get(
             '/',
-            authMiddleware(),
+            // authMiddleware(),
             // permissionMiddleware(['user_view']),
             validate(PagingSchema, ReqType.QUERY),
             validate(UserSearchSchema, ReqType.QUERY),
@@ -44,7 +44,7 @@ export class UserController implements Controller {
         
         this.router.get(
             '/:id',
-            authMiddleware(),
+            // authMiddleware(),
             // permissionMiddleware(['user_view']),
             this.detail
         );

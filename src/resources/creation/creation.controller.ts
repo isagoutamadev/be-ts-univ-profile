@@ -24,14 +24,14 @@ export class CreationController implements Controller {
     private initRoutes(): void {
         this.router.get(
             "/contents/types",
-            authMiddleware(),
+            // authMiddleware(),
             validate(PagingSchema, ReqType.QUERY),
             this.getTypes
         );
 
         this.router.get(
             "/",
-            authMiddleware(),
+            // authMiddleware(),
             validate(PagingSchema, ReqType.QUERY),
             this.get
         );
@@ -45,7 +45,7 @@ export class CreationController implements Controller {
 
         this.router.get(
             "/:id",
-            authMiddleware(),
+            // authMiddleware(),
             validate(UUIDSchema, ReqType.PARAMS),
             this.detail
         );
