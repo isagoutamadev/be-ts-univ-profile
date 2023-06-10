@@ -1,11 +1,11 @@
 import DataHelper from "@/helpers/data.helper";
-import { Student, UpdateStudent } from "@/models/student.model";
+import { SearchStudent, Student, UpdateStudent } from "@/models/student.model";
 import knex from "@/utils/knex/knex";
 import { Pagination, Paging } from "@/utils/responses/pagination.response";
 
 export class StudentsRepository {
     async get(
-        search: Student,
+        search: SearchStudent,
         page: number,
         limit: number
     ): Promise<Paging<Student>> {
@@ -15,8 +15,11 @@ export class StudentsRepository {
                 "student.nim",
                 "student.name",
                 "student.avatar",
+                "student.bio",
                 "student.registered_at",
                 "student.graduated_at",
+                "student.website_screenshot",
+                "student.website_url",
             ];
 
             const query = knex("m_students as student").select(select);
@@ -26,6 +29,17 @@ export class StudentsRepository {
             });
 
             query.whereNull("student.deleted_at");
+
+            if (search.is_graduated === 'true') {
+                query.whereNotNull("student.graduated_at");
+            } else if (search.is_graduated === 'false') {
+                query.whereNull("student.graduated_at");
+            }
+
+            if (search.is_portofolio_set === 'true') {
+                query.whereNotNull("student.website_screenshot");
+                query.whereNotNull("student.website_url");
+            }
 
             const offset = limit * page - limit;
             const queryCount = knex()

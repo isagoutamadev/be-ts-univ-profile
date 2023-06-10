@@ -1,4 +1,4 @@
-import { Student, UpdateStudent } from "@/models/student.model";
+import { SearchStudent, Student, UpdateStudent } from "@/models/student.model";
 import { Paging } from "@/utils/responses/pagination.response";
 import { StudentsRepository } from "./student.repository";
 import HttpException from "@/utils/exceptions/http.exception";
@@ -7,7 +7,7 @@ import { User } from "@/models/user.model";
 
 export class StudentsService {
     private repository = new StudentsRepository();
-    public get = async (search: Student, page: number, limit: number): Promise<Paging<Student>> => {
+    public get = async (search: SearchStudent, page: number, limit: number): Promise<Paging<Student>> => {
         try {            
             const result = await this.repository.get(search, page, limit);
             

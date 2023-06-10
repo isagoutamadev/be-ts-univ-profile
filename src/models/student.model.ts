@@ -1,5 +1,10 @@
 import { User } from "./user.model";
 
+export interface SearchStudent {
+    is_graduated?: string,
+    is_portofolio_set?: string,
+}
+
 export interface Student {
     id?: string,
     name?: string,
