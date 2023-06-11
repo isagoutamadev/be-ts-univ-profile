@@ -38,16 +38,24 @@ export class CreationRepository {
     
     async get(search: Creation, page: number, limit: number): Promise<Paging<Creation>> {
         try {
-            const select = [
+            const select: any = [
                 "creation.id",
                 "creation.title",
                 "creation.cover",
                 "creation.description",
-                knex.raw(`IF(COUNT(tag.id) = 0, '[]', JSON_ARRAYAGG(JSON_OBJECT(
+            ];
+
+            console.log(process.env.IS_FEBY_LAPTOP);
+
+            if (process.env.IS_FEBY_LAPTOP) {
+                select.push(knex.raw(`IF(COUNT(tag.id) = 0, '[]', GROUP_CONCAT(tag.id)) as tag_ids`));
+                select.push(knex.raw(`IF(COUNT(tag.id) = 0, '[]', GROUP_CONCAT(tag.name)) as tag_names`));
+            } else {
+                select.push(knex.raw(`IF(COUNT(tag.id) = 0, '[]', JSON_ARRAYAGG(JSON_OBJECT(
                     'id', tag.id,
                     'name', tag.name
-                ))) as tags`),
-            ];
+                ))) as tags`));
+            }
 
             const query = knex("m_creations as creation").select(select);
 
@@ -74,8 +82,24 @@ export class CreationRepository {
                 await query.limit(limit).offset(offset),
                 await queryCount
             ]);
+
+            const mappedData = datas.map(item => DataHelper.objectParse(item));
+            mappedData.map((item: any) => {
+                item.tags = [];
+                if (item.tag_ids && item.tag_names) {
+                    item.tag_ids = item.tag_ids.split(',');
+                    item.tag_names = item.tag_names.split(',');
+                    for (let i = 0; i < item.tag_ids.length; i++) {
+                        const id = item.tag_ids[i];
+                        item.tags[i] = {
+                            id: id,
+                            name: item.tag_names[i]
+                        }
+                    }
+                }
+            });
             const pagination = new Pagination<Creation>(
-                datas.map(item => DataHelper.objectParse(item)),
+                mappedData,
                 //@ts-ignore
                 count.total,
                 page,
@@ -90,21 +114,33 @@ export class CreationRepository {
     
     async find(search: Creation): Promise<Creation|undefined> {
         try {
-            const select = [
+            const select: any = [
                 "creation.id",
                 "creation.title",
                 "creation.cover",
                 "creation.description",
-                knex.raw(`IF(COUNT(tag.id) = 0, '[]', JSON_ARRAYAGG(JSON_OBJECT(
+            ];
+
+            if (process.env.IS_FEBY_LAPTOP) {
+                select.push(knex.raw(`IF(COUNT(tag.id) = 0, '[]', GROUP_CONCAT(tag.id)) as tag_ids`));
+                select.push(knex.raw(`IF(COUNT(tag.id) = 0, '[]', GROUP_CONCAT(tag.name)) as tag_names`));
+                
+                select.push(knex.raw(`IF(COUNT(content.id) = 0, '[]', GROUP_CONCAT(content.id)) as content_ids`));
+                select.push(knex.raw(`IF(COUNT(content.id) = 0, '[]', GROUP_CONCAT(
+                    CONCAT(IF(content.filename IS NULL, '0', content.filename), '|', CONCAT(IF(content.embed_code IS NULL, '0', content.embed_code))
+                    ))) as content_contents`));
+            } else {
+                select.push(knex.raw(`IF(COUNT(tag.id) = 0, '[]', JSON_ARRAYAGG(JSON_OBJECT(
                     'id', tag.id,
                     'name', tag.name
-                ))) as tags`),
-                knex.raw(`JSON_ARRAYAGG(JSON_OBJECT(
+                ))) as tags`));
+
+                select.push(knex.raw(`JSON_ARRAYAGG(JSON_OBJECT(
                     'id', content.id,
                     'filename', content.filename,
                     'embed_code', content.embed_code
-                )) as contents`),
-            ];
+                 )) as contents`));
+            }
 
             const query = knex("m_creations as creation").select(select);
 
@@ -133,10 +169,41 @@ export class CreationRepository {
 
             query.groupBy("creation.id");
 
-            const result = await query.first();
+            let result = await query.first();
 
             if (result) {
-                return DataHelper.objectParse(result);
+                result = DataHelper.objectParse(result);
+                
+                result.tags = [];
+                if (result.tag_ids && result.tag_names) {
+                    result.tag_ids = result.tag_ids.split(',');
+                    result.tag_names = result.tag_names.split(',');
+                    for (let i = 0; i < result.tag_ids.length; i++) {
+                        const id = result.tag_ids[i];
+                        result.tags[i] = {
+                            id: id,
+                            name: result.tag_names[i]
+                        }
+                    }
+                }
+
+                result.contents = [];
+                if (result.content_contents && result.content_ids) {
+                    result.content_ids = result.content_ids.split(',');
+                    result.content_contents = result.content_contents.split(',');
+                    for (let i = 0; i < result.content_contents.length; i++) {
+                        const id = result.tag_ids[i];
+                        const [filename, embed_code] = result.content_contents[i].split("|");
+
+                        result.contents[i] = {
+                            id: id,
+                            filename: filename === '0' ? null : filename,
+                            embed_code: embed_code === '0' ? null : embed_code,
+                        }
+                    }
+                }
+
+                return result;
             }
         } catch (error) {
             throw error;

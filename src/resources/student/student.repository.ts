@@ -87,11 +87,17 @@ export class StudentsRepository {
                     'id', major.id,
                     'name', major.name
                 ) as major`),
-                knex.raw(`IF(COUNT(tag.id) = 0, '[]', JSON_ARRAYAGG(JSON_OBJECT(
+            ];
+
+            if (process.env.IS_FEBY_LAPTOP) {
+                select.push(knex.raw(`IF(COUNT(tag.id) = 0, '[]', GROUP_CONCAT(tag.id)) as tag_ids`));
+                select.push(knex.raw(`IF(COUNT(tag.id) = 0, '[]', GROUP_CONCAT(tag.name)) as tag_names`));
+            } else {
+                select.push(knex.raw(`IF(COUNT(tag.id) = 0, '[]', JSON_ARRAYAGG(JSON_OBJECT(
                     'id', tag.id,
                     'name', tag.name
-                ))) as interest_tags`),
-            ];
+                ))) as interest_tags`));
+            }
 
             const query = knex("m_students as student").select(select);
             query.innerJoin("m_users as user", function () {
@@ -120,13 +126,28 @@ export class StudentsRepository {
             }
 
             query.groupBy("student.id");
-            const result = await query.first();
+            let result = await query.first();
 
             if (result) {
                 //@ts-ignore
                 // console.log(query.toQuery());
                 // return query.toQuery();
-                return DataHelper.objectParse(result);
+                result = DataHelper.objectParse(result);
+
+                result.interest_tags = [];
+                if (result.tag_ids && result.tag_names) {
+                    result.tag_ids = result.tag_ids.split(',');
+                    result.tag_names = result.tag_names.split(',');
+                    for (let i = 0; i < result.tag_ids.length; i++) {
+                        const id = result.tag_ids[i];
+                        result.interest_tags[i] = {
+                            id: id,
+                            name: result.tag_names[i]
+                        }
+                    }
+                }
+
+                return result;
             }
 
             return undefined;
