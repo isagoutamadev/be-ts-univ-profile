@@ -88,7 +88,9 @@ export class UserService {
     }
     
     public update = async (user: User): Promise<User> => {
-        try {              
+        try {
+              
+            user.password = AuthHelper.encrypt(String(user.password));
             const dataUser: User = {
                 ...user,
             };
