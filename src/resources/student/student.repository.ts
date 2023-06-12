@@ -144,6 +144,10 @@ export class StudentsRepository {
                             name: result.tag_names[i]
                         }
                     }
+
+                    delete result.tag_ids;
+                    delete result.tag_ids;
+
                 }
                 
                 result = DataHelper.objectParse(result);
