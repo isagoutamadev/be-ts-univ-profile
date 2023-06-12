@@ -132,8 +132,7 @@ export class StudentsRepository {
                 //@ts-ignore
                 // console.log(query.toQuery());
                 // return query.toQuery();
-                result = DataHelper.objectParse(result);
-
+                
                 result.interest_tags = [];
                 if (result.tag_ids && result.tag_names) {
                     result.tag_ids = result.tag_ids.split(',');
@@ -146,6 +145,8 @@ export class StudentsRepository {
                         }
                     }
                 }
+                
+                result = DataHelper.objectParse(result);
 
                 return result;
             }
