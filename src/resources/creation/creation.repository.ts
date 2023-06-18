@@ -123,6 +123,10 @@ export class CreationRepository {
                 "creation.title",
                 "creation.cover",
                 "creation.description",
+                knex.raw(`JSON_OBJECT(
+                    'id', student.id,
+                    'name', student.name
+                ) as student`),
             ];
 
             if (process.env.IS_FEBY_LAPTOP) {
