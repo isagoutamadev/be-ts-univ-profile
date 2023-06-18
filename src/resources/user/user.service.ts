@@ -89,8 +89,11 @@ export class UserService {
     
     public update = async (user: User): Promise<User> => {
         try {
+
+            if (user.password) {
+                user.password = AuthHelper.encrypt(String(user.password));
+            }
               
-            user.password = AuthHelper.encrypt(String(user.password));
             const dataUser: User = {
                 ...user,
             };
@@ -100,6 +103,17 @@ export class UserService {
             return {
                 ...dataUser
             };
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    public delete = async (user: User): Promise<User> => {
+        try {
+
+            await this.repository.delete(user);
+            
+            return {};
         } catch (error) {
             throw error;
         }

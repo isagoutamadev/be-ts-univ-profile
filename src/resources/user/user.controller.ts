@@ -57,6 +57,14 @@ export class UserController implements Controller {
             validate(UpdateUserSchema, ReqType.BODY),
             this.update
         );
+
+        this.router.delete(
+            '/:id',
+            authMiddleware(),
+            // permissionMiddleware(['user_update']),
+            validate(UUIDSchema, ReqType.PARAMS),
+            this.delete
+        );
     }
 
     private getUsers = async (
@@ -133,6 +141,25 @@ export class UserController implements Controller {
                 ...req.body,
                 id: id,
                 updated_by: auth.id,
+            });
+            
+            return response.ok<User>(result, res);
+        } catch (err: any) {
+            return next(new HttpException(err.message, err.statusCode));
+        }
+    }
+    
+    private delete = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { auth } = res.app.locals;
+            const { id } = req.params;
+            const result = await this.service.delete({
+                id: id,
+                deleted_by: auth.id,
             });
             
             return response.ok<User>(result, res);

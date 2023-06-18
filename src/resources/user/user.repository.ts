@@ -24,6 +24,7 @@ export class UserRepository {
             const query = knex("m_users as user").select(select)
                 .innerJoin("m_students as student", function () {
                     this.on("student.user_id", "user.id");
+                    this.onNull("student.deleted_at");
                 });
 
             if (search.id) {
@@ -85,7 +86,10 @@ export class UserRepository {
             const query = knex("m_users as user").select(select)
                 .innerJoin("m_students as student", function () {
                     this.on("student.user_id", "user.id");
+                    this.onNull("student.deleted_at");
                 });
+
+            query.whereNull("user.deleted_at");
 
             const user = await query.first();
             if (user) {
@@ -165,6 +169,24 @@ export class UserRepository {
                     ...user,
                     updated_at: knex.raw("now()"),
                 }).where("id", user.id);
+            });
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async delete(user: User): Promise<void> {
+        try {
+            await knex.transaction(async trx => {
+                await trx("m_users").update({
+                    deleted_by: user.deleted_by,
+                    deleted_at: knex.raw("now()"),
+                }).where("id", user.id);
+
+                await trx("m_students").update({
+                    deleted_by: user.deleted_by,
+                    deleted_at: knex.raw("now()"),
+                }).where("user_id", user.id);
             });
         } catch (error) {
             throw error;
