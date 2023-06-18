@@ -190,4 +190,25 @@ export class StudentsRepository {
             throw error;
         }
     }
+    
+    async delete(data: UpdateStudent): Promise<void> {
+        try {
+            await knex.transaction(async (trx) => {
+                await trx("m_students")
+                    .update({
+                        deleted_at: trx.raw("now()"),
+                        deleted_by: data.updated_by
+                    })
+                    .where("id", data.id);
+                const student = await trx("m_students").select("user_id").where("id", data.id).first();
+
+                await trx("m_users").update({
+                    deleted_at: trx.raw("now()"),
+                    deleted_by: data.updated_by
+                }).where("id", student.user_id);
+            });
+        } catch (error) {
+            throw error;
+        }
+    }
 }

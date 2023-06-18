@@ -43,6 +43,13 @@ export class StudentController implements Controller {
             validate(UpdateStudentSchema, ReqType.BODY),
             this.update
         );
+        
+        this.router.delete(
+            '/:id',
+            authMiddleware(),
+            validate(UUIDSchema, ReqType.PARAMS),
+            this.delete
+        );
     }
 
     private get = async (
@@ -90,6 +97,23 @@ export class StudentController implements Controller {
             const { id } = req.params;
 
             const result = await this.service.update({id, ...req.body}, auth);
+
+            return response.ok(result, res);
+        } catch (err: any) {
+            return next(new HttpException(err.message, err.statusCode));
+        }
+    }
+    
+    private delete = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { auth } = req.app.locals;
+            const { id } = req.params;
+
+            const result = await this.service.delete({id}, auth);
 
             return response.ok(result, res);
         } catch (err: any) {

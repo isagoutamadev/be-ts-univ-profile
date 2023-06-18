@@ -42,4 +42,16 @@ export class StudentsService {
             throw error;
         }
     }
+    
+    public delete = async (data: UpdateStudent, auth: User): Promise<Student> => {
+        try {
+            data.updated_by = auth.id;
+
+            await this.repository.delete(data);
+
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
