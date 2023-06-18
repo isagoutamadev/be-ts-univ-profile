@@ -10,8 +10,8 @@ export const CreateUserSchema = Joi.object({
 });
 export const UpdateUserSchema = Joi.object({
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).min(8).max(30).required(),
-    username: Joi.string().alphanum().min(8).required(),
-    password: Joi.string().min(6).required(),
+    username: Joi.string().alphanum().min(5).required(),
+    password: Joi.string().min(6),
     role: Joi.string().valid('admin', 'student').required()
 });
 
