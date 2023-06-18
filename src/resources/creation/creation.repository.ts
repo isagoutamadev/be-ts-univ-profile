@@ -73,6 +73,10 @@ export class CreationRepository {
                 this.onNull("tag.deleted_at");
             });
 
+            if (search.student_id) {
+                query.where("student.id", search.student_id);
+            }
+
             query.groupBy("creation.id");
 
             const offset = limit * page - limit;
