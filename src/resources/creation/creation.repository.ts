@@ -42,6 +42,7 @@ export class CreationRepository {
                 "creation.id",
                 "creation.title",
                 "creation.cover",
+                "creation.to_url",
                 "creation.description",
             ];
 
@@ -122,6 +123,7 @@ export class CreationRepository {
                 "creation.id",
                 "creation.title",
                 "creation.cover",
+                "creation.to_url",
                 "creation.description",
                 knex.raw(`JSON_OBJECT(
                     'id', student.id,
@@ -225,6 +227,7 @@ export class CreationRepository {
                     id: data.id,
                     title: data.title,
                     cover: data.cover,
+                    to_url: data.to_url,
                     description: data.description,
                     created_by: data.created_by,
                     student_id: data.student_id,
