@@ -120,6 +120,10 @@ export class UserRepository {
                 "user.email",
                 "user.username",
                 "user.role",
+                "user.facebook",
+                "user.twitter",
+                "user.instagram",
+                "user.linkedin",
                 knex.raw(`JSON_OBJECT(
                     'id', student.id,
                     'nim', student.nim,
