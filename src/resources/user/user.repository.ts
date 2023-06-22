@@ -13,6 +13,10 @@ export class UserRepository {
                 "user.email",
                 "user.username",
                 "user.role",
+                "user.facebook",
+                "user.twitter",
+                "user.instagram",
+                "user.linkedin",
                 knex.raw(`JSON_OBJECT(
                     'id', student.id,
                     'nim', student.nim,
@@ -75,6 +79,10 @@ export class UserRepository {
                 "user.email",
                 "user.username",
                 "user.role",
+                "user.facebook",
+                "user.twitter",
+                "user.instagram",
+                "user.linkedin",
                 knex.raw(`JSON_OBJECT(
                     'id', student.id,
                     'nim', student.nim,
@@ -90,6 +98,7 @@ export class UserRepository {
                 });
 
             query.whereNull("user.deleted_at");
+            query.where("user.id", id);
 
             const user = await query.first();
             if (user) {

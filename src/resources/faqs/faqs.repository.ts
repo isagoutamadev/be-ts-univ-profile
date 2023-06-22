@@ -46,6 +46,10 @@ export class FaqsRepository {
 
             const query = knex("m_faqs as faq").select(select);
 
+            if (search.id) {
+                query.where("faq.id", search.id);
+            }
+
             query.whereNull("faq.deleted_at");
 
             return await query.first();
