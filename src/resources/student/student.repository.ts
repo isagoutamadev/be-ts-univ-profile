@@ -133,8 +133,9 @@ export class StudentsRepository {
                 // console.log(query.toQuery());
                 // return query.toQuery();
                 
-                result.interest_tags = [];
                 if (result.tag_ids && result.tag_names) {
+                    result.interest_tags = [];
+
                     result.tag_ids = result.tag_ids.split(',');
                     result.tag_names = result.tag_names.split(',');
                     for (let i = 0; i < result.tag_ids.length; i++) {
@@ -147,6 +148,7 @@ export class StudentsRepository {
 
                     delete result.tag_ids;
                     delete result.tag_ids;
+                    
 
                 }
                 
