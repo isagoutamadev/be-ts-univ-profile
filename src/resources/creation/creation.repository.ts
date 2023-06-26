@@ -197,8 +197,10 @@ export class CreationRepository {
                     }
                 }
 
-                result.contents = [];
+                
                 if (result.content_contents && result.content_ids) {
+                    result.contents = [];
+                    
                     result.content_ids = result.content_ids.split(',');
                     result.content_contents = result.content_contents.split(',');
                     for (let i = 0; i < result.content_contents.length; i++) {
