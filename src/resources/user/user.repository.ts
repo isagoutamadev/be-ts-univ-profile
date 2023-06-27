@@ -92,7 +92,7 @@ export class UserRepository {
             ];
 
             const query = knex("m_users as user").select(select)
-                .innerJoin("m_students as student", function () {
+                .leftJoin("m_students as student", function () {
                     this.on("student.user_id", "user.id");
                     this.onNull("student.deleted_at");
                 });
