@@ -20,6 +20,11 @@ export class StudentsRepository {
                 "student.graduated_at",
                 "student.website_screenshot",
                 "student.website_url",
+                knex.raw(`JSON_OBJECT(
+                    'id', user.id,
+                    'username', user.username,
+                    'email', user.email
+                ) as user`),
             ];
 
             const query = knex("m_students as student").select(select);
@@ -52,7 +57,7 @@ export class StudentsRepository {
                 await queryCount,
             ]);
             const pagination = new Pagination<Student>(
-                datas,
+                datas.map(item => DataHelper.objectParse(item)),
                 //@ts-ignore
                 count.total,
                 page,
