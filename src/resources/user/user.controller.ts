@@ -43,11 +43,19 @@ export class UserController implements Controller {
         );
         
         this.router.get(
+            '/find',
+            // authMiddleware(),
+            // permissionMiddleware(['user_view']),
+            this.find
+        );
+
+        this.router.get(
             '/:id',
             // authMiddleware(),
             // permissionMiddleware(['user_view']),
             this.detail
         );
+
 
         this.router.put(
             '/:id',
@@ -102,6 +110,26 @@ export class UserController implements Controller {
             const { id } = req.params;
 
             const result = await this.service.find({id}, auth);
+            
+            return response.global<User>(res, {
+                code: ResponseCode.OK,
+                result: result,
+            });
+        } catch (err: any) {
+            return next(new HttpException(err.message, err.statusCode));
+        }
+    }
+    
+    private find = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { auth } = res.app.locals;
+            const { id } = req.params;
+
+            const result = await this.service.find(req.query, auth);
             
             return response.global<User>(res, {
                 code: ResponseCode.OK,

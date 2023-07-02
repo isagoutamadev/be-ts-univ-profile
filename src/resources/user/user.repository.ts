@@ -141,6 +141,10 @@ export class UserRepository {
                 query.where("user.id", search.id);
             }
 
+            if (search.username) {
+                query.where("username", search.username);
+            }
+
             const user = await query.first();
             if (user) {
                 return {
