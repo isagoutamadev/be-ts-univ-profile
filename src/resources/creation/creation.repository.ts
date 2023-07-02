@@ -44,6 +44,11 @@ export class CreationRepository {
                 "creation.cover",
                 "creation.to_url",
                 "creation.description",
+                knex.raw(`JSON_OBJECT(
+                    'id', student.id,
+                    'name', student.name,
+                    'nim', student.nim
+                ) as student`),
             ];
 
             console.log(process.env.IS_FEBY_LAPTOP);
@@ -127,7 +132,8 @@ export class CreationRepository {
                 "creation.description",
                 knex.raw(`JSON_OBJECT(
                     'id', student.id,
-                    'name', student.name
+                    'name', student.name,
+                    'nim', student.nim
                 ) as student`),
             ];
 
