@@ -12,5 +12,5 @@ export const UpdateStudentSchema = Joi.object({
     website_screenshot: Joi.string().allow(null),
     interest_tag_ids: Joi.array().items(
         Joi.string().uuid().required()
-    ).min(1).required(),
+    ).min(0).allow(null),
 });
