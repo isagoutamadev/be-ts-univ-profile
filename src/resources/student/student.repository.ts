@@ -203,6 +203,7 @@ export class StudentsRepository {
             await knex.transaction(async (trx) => {
                 await trx("m_students")
                     .update({
+                        nim: trx.raw("CONCAT(nim, '-deleted-', now())"),
                         deleted_at: trx.raw("now()"),
                         deleted_by: data.updated_by
                     })
@@ -210,6 +211,8 @@ export class StudentsRepository {
                 const student = await trx("m_students").select("user_id").where("id", data.id).first();
 
                 await trx("m_users").update({
+                    email: trx.raw("CONCAT(email, '-deleted-', now())"),
+                    username: trx.raw("CONCAT(username, '-deleted-', now())"),
                     deleted_at: trx.raw("now()"),
                     deleted_by: data.updated_by
                 }).where("id", student.user_id);

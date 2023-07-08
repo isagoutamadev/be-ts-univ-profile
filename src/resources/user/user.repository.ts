@@ -196,11 +196,14 @@ export class UserRepository {
         try {
             await knex.transaction(async trx => {
                 await trx("m_users").update({
+                    email: trx.raw("CONCAT(email, '-deleted-', now())"),
+                    username: trx.raw("CONCAT(username, '-deleted-', now())"),
                     deleted_by: user.deleted_by,
                     deleted_at: knex.raw("now()"),
                 }).where("id", user.id);
 
                 await trx("m_students").update({
+                    nim: trx.raw("CONCAT(nim, '-deleted-', now())"),
                     deleted_by: user.deleted_by,
                     deleted_at: knex.raw("now()"),
                 }).where("user_id", user.id);
