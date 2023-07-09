@@ -18,6 +18,7 @@ export const CreateCreationSchema = Joi.object({
         .required(),
     contents: Joi.array().items(Joi.object({
         filename: Joi.string().min(5).allow(null),
-        embed_code: Joi.string().min(50).allow(null),
+        embed_code: Joi.string().min(5).allow(null),
+        url: Joi.string().min(5).allow(null),
     })).min(1).required()
 });
