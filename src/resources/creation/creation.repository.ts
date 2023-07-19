@@ -95,8 +95,8 @@ export class CreationRepository {
 
             const mappedData = datas.map(item => DataHelper.objectParse(item));
             mappedData.map((item: any) => {
-                item.tags = [];
                 if (item.tag_ids && item.tag_names) {
+                    item.tags = [];
                     item.tag_ids = item.tag_ids.split(',');
                     item.tag_names = item.tag_names.split(',');
                     for (let i = 0; i < item.tag_ids.length; i++) {
@@ -190,8 +190,8 @@ export class CreationRepository {
             if (result) {
                 result = DataHelper.objectParse(result);
                 
-                result.tags = [];
                 if (result.tag_ids && result.tag_names) {
+                    result.tags = [];
                     result.tag_ids = result.tag_ids.split(',');
                     result.tag_names = result.tag_names.split(',');
                     for (let i = 0; i < result.tag_ids.length; i++) {
