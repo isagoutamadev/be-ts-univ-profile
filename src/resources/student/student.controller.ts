@@ -32,7 +32,7 @@ export class StudentController implements Controller {
         this.router.get(
             '/:id',
             // authMiddleware(),
-            validate(UUIDSchema, ReqType.PARAMS),
+            // validate(UUIDSchema, ReqType.PARAMS),
             this.findById
         );
         
