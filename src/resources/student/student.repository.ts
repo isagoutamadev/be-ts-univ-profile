@@ -127,7 +127,7 @@ export class StudentsRepository {
             query.whereNull("student.deleted_at");
 
             if (search.id) {
-                query.where("student.id", search.id);
+                query.where((q) => q.where("student.id", search.id).orWhere("user.username", search.id));
             }
 
             query.groupBy("student.id");
