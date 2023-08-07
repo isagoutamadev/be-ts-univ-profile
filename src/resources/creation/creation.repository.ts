@@ -77,7 +77,10 @@ export class CreationRepository {
             query.leftJoin("m_tags as tag", function () {
                 this.on("tag.id", "mct.tag_id");
                 this.onNull("tag.deleted_at");
+            
             });
+
+            query.whereNull("creation.deleted_at");
 
             if (search.student_id) {
                 query.where("student.id", search.student_id);
@@ -179,6 +182,8 @@ export class CreationRepository {
                 this.onNull("tag.deleted_at");
             });
 
+            query.whereNull("creation.deleted_at");
+
             if (search.id) {
                 query.where("creation.id", search.id);
             }
@@ -259,7 +264,25 @@ export class CreationRepository {
                     }
                 }));
             });
-;        } catch (error) {
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    async delete(data: Creation): Promise<void> {
+        try {
+            await knex.transaction(async trx => {
+                await trx("m_creations").update({
+                    deleted_by: data.deleted_by,
+                    deleted_at: knex.raw("now()"),
+                }).where("id", data.id);
+
+                await trx("m_creation_contents").update({
+                    deleted_by: data.deleted_by,
+                    deleted_at: knex.raw("now()"),
+                }).where("creation_id", data.id);
+            });
+        } catch (error) {
             throw error;
         }
     }

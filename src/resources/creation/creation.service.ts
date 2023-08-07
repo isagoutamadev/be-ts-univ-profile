@@ -56,4 +56,15 @@ export class CreationService {
             throw error;
         }
     }
+    
+    public delete = async (id: string, auth: User): Promise<void> => {
+        try {
+            await this.repository.delete({
+                id: id,
+                created_by: auth.id,
+            });
+        } catch (error) {
+            throw error;
+        }
+    }
 }

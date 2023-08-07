@@ -49,6 +49,13 @@ export class CreationController implements Controller {
             validate(UUIDSchema, ReqType.PARAMS),
             this.detail
         );
+        
+        this.router.delete(
+            "/:id",
+            authMiddleware(),
+            validate(UUIDSchema, ReqType.PARAMS),
+            this.delete
+        );
     }
 
     private getTypes = async (
@@ -107,6 +114,23 @@ export class CreationController implements Controller {
             const result = await this.service.create(req.body, auth);
 
             return response.created(result, res);
+        } catch (err: any) {
+            return next(new HttpException(err.message, err.statusCode));
+        }
+    };
+
+    private delete = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { id } = req.params;
+            const { auth } = res.app.locals;
+
+            await this.service.delete(id, auth);
+
+            return response.ok(undefined, res);
         } catch (err: any) {
             return next(new HttpException(err.message, err.statusCode));
         }
