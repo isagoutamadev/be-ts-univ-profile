@@ -57,6 +57,20 @@ export class CreationService {
         }
     }
     
+    public update = async (data: CreateCreation, auth: User): Promise<Creation> => {
+        try {
+            data.student_id = auth.student?.id;
+            await this.repository.update({
+                ...data,
+                updated_by: auth.id,
+            });
+
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    
     public delete = async (id: string, auth: User): Promise<void> => {
         try {
             await this.repository.delete({

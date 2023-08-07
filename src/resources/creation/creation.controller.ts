@@ -49,6 +49,14 @@ export class CreationController implements Controller {
             validate(UUIDSchema, ReqType.PARAMS),
             this.detail
         );
+
+        this.router.put(
+            "/:id",
+            authMiddleware(),
+            validate(UUIDSchema, ReqType.PARAMS),
+            validate(CreateCreationSchema, ReqType.BODY),
+            this.update
+        );
         
         this.router.delete(
             "/:id",
@@ -114,6 +122,25 @@ export class CreationController implements Controller {
             const result = await this.service.create(req.body, auth);
 
             return response.created(result, res);
+        } catch (err: any) {
+            return next(new HttpException(err.message, err.statusCode));
+        }
+    };
+    
+    private update = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<Response | void> => {
+        try {
+            const { id } = req.params;
+            const { auth } = res.app.locals;
+            const result = await this.service.update({
+                id,
+                ...req.body
+            }, auth);
+
+            return response.ok(result, res);
         } catch (err: any) {
             return next(new HttpException(err.message, err.statusCode));
         }

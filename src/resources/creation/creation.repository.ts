@@ -269,6 +269,46 @@ export class CreationRepository {
         }
     }
     
+    async update(data: CreateCreation): Promise<void> {
+        try {
+            await knex.transaction(async trx => {
+                await trx("m_creations").update({
+                    id: data.id,
+                    title: data.title,
+                    cover: data.cover,
+                    to_url: data.to_url,
+                    description: data.description,
+                    updated_by: data.updated_by,
+                    student_id: data.student_id,
+                    updated_at: knex.raw("now()")
+                }).where("id", data.id);
+
+                await trx("m_creation_contents").delete().where("creation_id", data.id);
+
+                await trx("m_creation_contents").insert(data.contents?.map(content => {
+                    return {
+                        ...content,
+                        id: uuid(),
+                        creation_id: data.id,
+                        created_by: data.created_by,
+                        created_at: knex.raw("now()"),
+                    }
+                }));
+
+                await trx("map_creation_tags").delete().where("creation_id", data.id);
+                
+                await trx("map_creation_tags").insert(data.tag_ids?.map(id => {
+                    return {
+                        creation_id: data.id,
+                        tag_id: id,
+                    }
+                }));
+            });
+        } catch (error) {
+            throw error;
+        }
+    }
+    
     async delete(data: Creation): Promise<void> {
         try {
             await knex.transaction(async trx => {
