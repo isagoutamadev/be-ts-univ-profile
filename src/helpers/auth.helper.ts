@@ -29,17 +29,19 @@ export default class AuthHelper {
                 is_sso: false,
             };
             try {
+                console.log(token);
                 // @ts-ignore
                 decoded = jwt.verify(token, key);
                 decoded.is_sso = false;
             } catch (error) {
-                const decodeBase64 = Buffer.from(token, 'base64').toString('utf-8');
-                const jsonParsed = JSON.parse(decodeBase64);
-                // @ts-ignore
-                decoded = jwt.verify(jsonParsed.token, keySSO);
-                // @ts-ignore
-                decoded = decoded.users;
-                decoded.is_sso = true;
+                // const decodeBase64 = Buffer.from(token, 'base64').toString('utf-8');
+                // const jsonParsed = JSON.parse(decodeBase64);
+                // // @ts-ignore
+                // decoded = jwt.verify(jsonParsed.token, keySSO);
+                // // @ts-ignore
+                // decoded = decoded.users;
+                // decoded.is_sso = true;
+                throw error;
             }
             return decoded;
         } catch (error) {
